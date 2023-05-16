@@ -12,7 +12,7 @@
 
 class ChargingStation:
     def __init__(self, charging_station_type, charging_station_power, charging_station_efficiency,
-                 charging_station_cost, charging_station_probability, ev_id=None):
+                 charging_station_cost, charging_station_probability, ev_id=None, color=None):
         # Parameters Assign
         self.charging_station_type = charging_station_type
         self.charging_station_power = charging_station_power
@@ -25,6 +25,9 @@ class ChargingStation:
 
         # EV ID
         self.ev_id = ev_id
+
+        # Color - for plotting
+        self.color = color
 
     # Formatted print method
     def __repr__(self):
