@@ -167,6 +167,47 @@ class DrivableEV(EV):
         self.driving_distance.append(driving_distance)
         self.driving_energy_consumption.append(driving_energy_consumption)
 
+    # Reset the SoC
+    def reset_initial_soc(self, initial_soc):
+        self.current_soc = inicial_soc
+        self.soc = [initial_soc]
+
+    #  Reset logs
+    def reset_logs(self):
+        # Charging times
+        self.charging_start_time = []
+        self.charging_end_time = []
+        self.charging_type = []
+        self.charging_power = []
+        self.charging_start_soc = []
+        self.charging_end_soc = []
+
+        # Driving Logs
+        self.driving_start_time = []
+        self.driving_end_time = []
+        self.driving_start_soc = []
+        self.driving_end_soc = []
+        self.driving_distance = []
+        self.driving_energy_consumption = []
+
+        # Flexibility logs
+        self.flexibility_start_time = []
+        self.flexibility_end_time = []
+        self.flexibility_type = []
+        self.flexibility_power = []
+        self.flexibility_start_soc = []
+        self.flexibility_end_soc = []
+
+    # Reset the stopping points
+    def reset_stops(self):
+        self.number_of_stops = 0
+
+    # Reset the EV for a new day
+    def reset(self, initial_soc):
+        self.reset_initial_soc(initial_soc)
+        self.reset_logs()
+        self.reset_stops()
+
     # Create a method to discharge the EV
     def discharge(self, discharge_amount):
         self.current_soc -= discharge_amount / self.discharging_efficiency
