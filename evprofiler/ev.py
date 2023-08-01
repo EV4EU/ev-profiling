@@ -44,7 +44,8 @@ class DrivableEV(EV):
     # - List of trips
     # - Current trip
     def __init__(self, brand, model, battery_type, battery_size, charging_efficiency, discharging_efficiency,
-                 energy_per_km, soc_min, soc_max, probability_in_population, initial_soc=None, stopping_soc=None):
+                 energy_per_km, soc_min, soc_max, probability_in_population, initial_soc=None, stopping_soc=None,
+                 initial_date=None):
         super().__init__(brand, model, battery_type, battery_size, charging_efficiency, discharging_efficiency,
                          energy_per_km, soc_min, soc_max, probability_in_population)
 
@@ -77,6 +78,9 @@ class DrivableEV(EV):
 
         # Number of stops
         self.number_of_stops = 0
+
+        # Initial date
+        self.initial_date = initial_date if initial_date is not None else datetime.datetime(2023, 1, 1, 0, 0, 0)
 
         # Charging times
         self.charging_start_time = []
@@ -202,6 +206,10 @@ class DrivableEV(EV):
     def reset_stops(self):
         self.number_of_stops = 0
 
+    # Set the initial date given to the logs
+    def set_date(self, initial_date):
+        self.initial_date = initial_date
+
     # Reset the EV for a new day
     def reset(self, initial_soc):
         self.reset_initial_soc(initial_soc)
@@ -255,7 +263,7 @@ class DrivableEV(EV):
         list_split_trips = []
 
         # Placeholder for the current time
-        current_time = datetime.datetime(2023, 1, 1, 0, 0, 0)
+        current_time = self.initial_date
 
         # Check if the profile allows charging during the day
         charge_during_day = self.user_profile.charge_during_day
