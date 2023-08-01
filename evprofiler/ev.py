@@ -169,7 +169,7 @@ class DrivableEV(EV):
 
     # Reset the SoC
     def reset_initial_soc(self, initial_soc):
-        self.current_soc = inicial_soc
+        self.current_soc = initial_soc
         self.soc = [initial_soc]
 
     #  Reset logs
