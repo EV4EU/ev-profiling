@@ -24,7 +24,8 @@ class Aggregator:
                  avg_speed_short=60, avg_speed_medium=80, avg_speed_long=100,
                  medium_trip_min=50, medium_trip_max=100, trip_length_variation=0.05, trip_start_variation=1.0,
                  avg_speed_variation=1.0,
-                 simulation_cycles=1, show_progress=True):
+                 simulation_cycles=1, initial_date=None,
+                 show_progress=True):
         # Profile assign
         self.profiles = profiles
 
@@ -39,6 +40,9 @@ class Aggregator:
 
         # Number of EVs of the simulation
         self.number_of_evs = n_evs
+
+        # Initial date of the simulation
+        self.initial_date = initial_date if initial_date is not None else datetime.datetime(2023, 1, 1, 0, 0, 0)
 
         # Create a list of trips
         self.trips = None
@@ -168,8 +172,8 @@ class Aggregator:
                               user_profile.profile_trip_schedule.schedule_start[i] + self.trip_start_variation, 1)[0]
 
             # Segment start in datetime
-            segment_start = datetime.datetime(2023, 1, 1, int(segment_start),
-                                              int((segment_start - int(segment_start)) * 60))
+            segment_start = datetime.datetime(self.initial_date.year, self.initial_date.month, self.initial_date.day,
+                                              int(segment_start), int((segment_start - int(segment_start)) * 60))
             segment_start = segment_start + datetime.timedelta(days=day)
 
             # Get a random average speed centered on avg_speed with variation
@@ -396,7 +400,7 @@ class Aggregator:
     def ev_charging_history_dataframe(self):
 
         # Create a date range with a frequency of 1 hour
-        date_range = pd.date_range(start='1/1/2023', periods=self.simulation_cycles * 24, freq='H')
+        date_range = pd.date_range(start=self.initial_date, periods=self.simulation_cycles * 24, freq='H')
 
         # Create the index for the dataframe
         cs_df = self.cs_charging_dataframe()
@@ -464,7 +468,7 @@ class Aggregator:
     def ev_driving_history_dataframe(self):
 
         # Create a date range with a frequency of 1 hour
-        date_range = pd.date_range(start='1/1/2023', periods=self.simulation_cycles * 24, freq='H')
+        date_range = pd.date_range(start=self.initial_date, periods=self.simulation_cycles * 24, freq='H')
 
         # Create the index for the dataframe
         drv_df = self.ev_driving_dataframe()
@@ -493,7 +497,7 @@ class Aggregator:
     def ev_stopped(self):
 
         # Create a date range with a frequency of 1 hour
-        date_range = pd.date_range(start='1/1/2023', periods=self.simulation_cycles * 24, freq='H')
+        date_range = pd.date_range(start=self.initial_date, periods=self.simulation_cycles * 24, freq='H')
 
         # Create the index for the dataframe
         drv_df = self.ev_driving_dataframe()
@@ -568,7 +572,7 @@ class Aggregator:
     def ev_flexibility_history_dataframe(self):
 
         # Create a date range with a frequency of 1 hour
-        date_range = pd.date_range(start='1/1/2023', periods=self.simulation_cycles * 24, freq='H')
+        date_range = pd.date_range(start=self.initial_date, periods=self.simulation_cycles * 24, freq='H')
 
         # Create the index for the dataframe
         flex_df = self.ev_flexibility_dataframe()
